@@ -4,31 +4,12 @@
 import { CompleteConverse, Model } from '@/types';
 import * as React from 'react';
 import { getConversationFromLocalStorage, sortConversationByTimestamp } from '../utils';
+import SelectMenu from '@/components/SelectMenu/SelectMenu';
+import { models } from '../constants';
 
 interface Props { }
 
-const models: Model[] = [
-    {
-        id: "image",
-        name: "Image Generation"
-    },
-    {
-        id: "imageUpgraded",
-        name: "Image Generation Pro"
-    },
-    {
-        id: "textGeneration",
-        name: "Text Generation"
-    },
-    {
-        id: "textGenerationUpgraded",
-        name: "Text Generation Pro"
-    },
-    {
-        id: "imageClassification",
-        name: "Image Classification"
-    }
-]
+
 
 const AiPage: React.FC<Props> = ({ }) => {
     const [conversation, setConversation] = React.useState<CompleteConverse[]>(getConversationFromLocalStorage());
@@ -148,25 +129,15 @@ const AiPage: React.FC<Props> = ({ }) => {
 
     // Save the updated conversation state to local storage
     localStorage.setItem('conversation', JSON.stringify(conversation));
-    
+
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-24 text-white">
             <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 min-w-[30rem]">
-                <label htmlFor="model">Choose a model:</label>
-                <select id="model"
-                    name="model"
-                    className="text-black"
-                    value={model.id}
-                    onChange={(e) => {
-                        const selectedModel = models.find((m) => m.id === e.target.value);
-                        if (selectedModel) {
-                            setModel(selectedModel);
-                        }
-                    }}>
-                    {models.map((model) => (
-                        <option key={model.id} value={model.id}>{model.name}</option>
-                    ))}
-                </select>
+                <SelectMenu
+                    models={models}
+                    selectedModel={model}
+                    onModelChange={(selectedModel) => setModel(selectedModel)}
+                />
                 {/* We are not using the image classifier model */}
                 {model.id !== models[4].id ? (
                     <input name="prompt" placeholder='enter prompt' className="custom-border" />
@@ -175,7 +146,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                     <input type="file" accept="image/*" onChange={handleImageChange} />
 
                 )}
-                <button type="submit" className="p-5 rounded-xl bg-gray-600 border-2 border-yellow-400/[0] hover:bg-gray-900 hover:border-2 hover:border-yellow-400/[1]">Submit</button>
+                <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1]">Submit</button>
             </form>
 
             <div className="response-wrapper p-20">
