@@ -1,40 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import Image from 'next/image';
+import { CompleteConverse, Model } from '@/types';
 import * as React from 'react';
+import { sortConversationByTimestamp } from '../utils';
 
-interface Props {
-
-}
-
-/**
- * If conversation growing very large and want to optimize performance, we can 
- * implementing lazy loading or pagination to load only a subset of the 
- * conversation at a time.
- * Additionally, if we need to persist the conversation data across sessions 
- * or enable features like search or filtering, you can consider storing the 
- * conversation data in a database or a server-side storage solution.
- */
-interface CompleteConverse {
-    prompt: string;
-    response: {
-        type: 'image' | 'text' | 'imageClassification';
-        content: string;
-        imageUrl?: string; // Optional property for image classification
-    };
-    timestamp: number;
-}
-
-// interface ChatMessage {
-//     role: 'user' | 'assistant';
-//     content: string
-// }
-
-interface Model {
-    id: string;
-    name: string
-}
+interface Props { }
 
 const models: Model[] = [
     {
@@ -60,7 +31,6 @@ const models: Model[] = [
 ]
 
 const AiPage: React.FC<Props> = ({ }) => {
-    // const [response, setResponse] = React.useState<{ type: 'image' | 'text'; content: string }[]>([]);
     const [conversation, setConversation] = React.useState<CompleteConverse[]>([]);
     const [model, setModel] = React.useState<Model>(models[0])
 
@@ -172,6 +142,8 @@ const AiPage: React.FC<Props> = ({ }) => {
         }
     };
 
+    const sortedConversation = sortConversationByTimestamp(conversation);
+
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-24 text-white">
             <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 min-w-[30rem]">
@@ -214,7 +186,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                         )}
                     </div>
                 ) : null}
-                {conversation.sort((a, b) => a.timestamp - b.timestamp).map((item, index) => (
+                {sortedConversation.map((item, index) => (
                     <React.Fragment key={index}>
                         <p className="text-lg mb-2">Prompt: {item.prompt}</p>
                         {item.response.type === 'image' ? (
