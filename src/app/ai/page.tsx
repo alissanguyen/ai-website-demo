@@ -3,7 +3,7 @@
 
 import { CompleteConverse, Model } from '@/types';
 import * as React from 'react';
-import { sortConversationByTimestamp } from '../utils';
+import { getConversationFromLocalStorage, sortConversationByTimestamp } from '../utils';
 
 interface Props { }
 
@@ -31,7 +31,7 @@ const models: Model[] = [
 ]
 
 const AiPage: React.FC<Props> = ({ }) => {
-    const [conversation, setConversation] = React.useState<CompleteConverse[]>([]);
+    const [conversation, setConversation] = React.useState<CompleteConverse[]>(getConversationFromLocalStorage());
     const [model, setModel] = React.useState<Model>(models[0])
 
     const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
@@ -128,6 +128,8 @@ const AiPage: React.FC<Props> = ({ }) => {
                     console.error('Error:', error);
                 });
         }
+
+
     }
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,6 +146,9 @@ const AiPage: React.FC<Props> = ({ }) => {
 
     const sortedConversation = sortConversationByTimestamp(conversation);
 
+    // Save the updated conversation state to local storage
+    localStorage.setItem('conversation', JSON.stringify(conversation));
+    
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-24 text-white">
             <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 min-w-[30rem]">

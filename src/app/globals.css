@@ -13,9 +13,10 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(rgb(43, 43, 52), rgb(9, 9, 10));
+  background-size: cover;
 }
 
 @layer utilities {
