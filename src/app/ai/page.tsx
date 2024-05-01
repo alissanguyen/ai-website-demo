@@ -187,19 +187,21 @@ const AiPage: React.FC<Props> = ({ }) => {
                     </div>
                 ) : null}
                 {sortedConversation.map((item, index) => (
-                    <React.Fragment key={index}>
-                        <p className="text-lg mb-2">Prompt: {item.prompt}</p>
-                        {item.response.type === 'image' ? (
-                            <img src={item.response.content} alt="" className="Image_Element mb-4" />
-                        ) : item.response.type === 'imageClassification' ? (
-                            <>
-                                <img src={item.response.imageUrl} alt="" className="Image_Element mb-4" />
+                    <div key={index} className="mb-10">
+                        <p className="Prompt__Bubble Bubble mb-2 mr-10" style={{ opacity: "1", transform: "none" }}>Prompt: {item.prompt}</p>
+                        <div className="Response__Bubble Bubble">
+                            {item.response.type === 'image' ? (
+                                <img src={item.response.content} alt="" className="Image_Element mb-4" />
+                            ) : item.response.type === 'imageClassification' ? (
+                                <>
+                                    <img src={item.response.imageUrl} alt="" className="Image_Element mb-4" />
+                                    <p className="text-lg mb-4">Answer: {item.response.content}</p>
+                                </>
+                            ) : (
                                 <p className="text-lg mb-4">Answer: {item.response.content}</p>
-                            </>
-                        ) : (
-                            <p className="text-lg mb-4">Answer: {item.response.content}</p>
-                        )}
-                    </React.Fragment>
+                            )}
+                        </div>
+                    </div>
                 ))}
             </div>
 

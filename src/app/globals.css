@@ -4,26 +4,18 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
+  height: 100vh;
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(rgb(43, 43, 52), rgb(9, 9, 10));
 }
 
 @layer utilities {
@@ -31,10 +23,24 @@ body {
     text-wrap: balance;
   }
   .custom-border {
-    @apply border bg-zinc-800/30 p-4 rounded-xl w-auto hover:border-gray-300
+    @apply border bg-zinc-800/30 p-4 rounded-xl w-auto hover:border-gray-300;
   }
 
   .Image_Element {
-    @apply max-w-[80%] m-auto mb-4 rounded-xl
+    @apply max-w-[80%] mb-4 rounded-xl;
   }
+  .Bubble {
+    @apply rounded-xl border-solid box-border p-4 pl-10 break-words transition-all max-w-[75ch] text-lg
+  }
+}
+.Prompt__Bubble {
+  border-color: rgb(108, 106, 96);
+  background-image: linear-gradient(rgb(17, 18, 23) 50%, rgb(13, 13, 11));
+  box-shadow: rgba(57, 51, 51, 0.024) 2px 2px 16px 2px;
+  color: rgb(229, 229, 226);
+}
+
+.Response__Bubble {
+  background-image: linear-gradient(rgb(43, 42, 54) 50%, rgb(34, 34, 44));
+  color: rgb(229, 229, 226);
 }
