@@ -23,6 +23,7 @@ interface CompleteConverse {
         content: string;
         imageUrl?: string; // Optional property for image classification
     };
+    timestamp: number;
 }
 
 // interface ChatMessage {
@@ -98,6 +99,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                             content: classificationResultText,
                             imageUrl: imagePreview,
                         },
+                        timestamp: Date.now(),
                     },
                 ]);
             }
@@ -142,13 +144,13 @@ const AiPage: React.FC<Props> = ({ }) => {
                         const imageUrl = URL.createObjectURL(data);
                         setConversation((prevConversation) => [
                             ...prevConversation,
-                            { prompt, response: { type: 'image', content: imageUrl } },
+                            { prompt, response: { type: 'image', content: imageUrl }, timestamp: Date.now() },
                         ]);
                     } else if (model.id === models[2].id || model.id === models[3].id) {
                         // Process text response
                         setConversation((prevConversation) => [
                             ...prevConversation,
-                            { prompt, response: { type: 'text', content: data.data.response } },
+                            { prompt, response: { type: 'text', content: data.data.response }, timestamp: Date.now() },
                         ]);
                     }
                 })
@@ -212,7 +214,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                         )}
                     </div>
                 ) : null}
-                {conversation.map((item, index) => (
+                {conversation.sort((a, b) => a.timestamp - b.timestamp).map((item, index) => (
                     <React.Fragment key={index}>
                         <p className="text-lg mb-2">Prompt: {item.prompt}</p>
                         {item.response.type === 'image' ? (
