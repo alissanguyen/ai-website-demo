@@ -141,8 +141,8 @@ const AiPage: React.FC<Props> = ({ }) => {
     }
 
     return (
-        <main className="flex min-h-[10rem] flex-col items-center justify-between p-24 text-white">
-            <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 min-w-[30rem]">
+        <main className="flex min-h-[10rem] flex-col items-center justify-between p-10 pt-24 md:p-24 text-white">
+            <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 w-full md:max-w-[50%]">
                 <SelectMenu
                     models={models}
                     selectedModel={model}
@@ -161,7 +161,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                 <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1]">Submit</button>
             </form>
 
-            <div className="response-wrapper p-20">
+            <div className="response-wrapper pt-12 lg:p-20">
 
                 {model.id === models[4].id ? (
                     // We are using the image classifier model, so we add an input form for user to submit an image

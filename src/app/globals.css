@@ -22,7 +22,7 @@ body {
     @apply max-w-[80%] mb-4 rounded-xl;
   }
   .Bubble {
-    @apply rounded-xl border-solid box-border p-4 pl-10 break-words transition-all max-w-[75ch] text-lg
+    @apply rounded-xl border-solid box-border p-4 pl-5 md:pl-10 break-words transition-all max-w-[75ch] text-lg
   }
 }
 .Prompt__Bubble {
