@@ -135,8 +135,10 @@ const AiPage: React.FC<Props> = ({ }) => {
 
     const sortedConversation = sortConversationByTimestamp(conversation);
 
-    // Save the updated conversation state to local storage
-    localStorage.setItem('conversation', JSON.stringify(conversation));
+    // Save the updated conversation state to local storage if available
+    if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('conversation', JSON.stringify(conversation));
+    }
 
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-24 text-white">
