@@ -19,9 +19,11 @@ const AiPage: React.FC<Props> = ({ }) => {
     const [imagePreview, setImagePreview] = React.useState<string | null>(null);
     const [classificationResult, setClassificationResult] = React.useState<string | null>(null);
 
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        setIsLoading(true);
 
         if (model.id === models[4].id && selectedImage) {
             const arrayBuffer = await selectedImage.arrayBuffer();
@@ -33,6 +35,8 @@ const AiPage: React.FC<Props> = ({ }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ model: 'imageClassification', image: Array.from(uint8Array) }),
+            }).finally(() => {
+                setIsLoading(false);
             });
 
             const result = await response.json();
@@ -71,7 +75,7 @@ const AiPage: React.FC<Props> = ({ }) => {
              * }
              */
 
-            fetch('http://localhost:8787', {
+            fetch('https://cloudflare-ai-demo.im-tamnguyen.workers.dev', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
@@ -107,9 +111,10 @@ const AiPage: React.FC<Props> = ({ }) => {
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                }).finally(() => {
+                    setIsLoading(false);
                 });
         }
-
 
     }
 
@@ -150,6 +155,7 @@ const AiPage: React.FC<Props> = ({ }) => {
             </form>
 
             <div className="response-wrapper p-20">
+
                 {model.id === models[4].id ? (
                     // We are using the image classifier model, so we add an input form for user to submit an image
                     <div>
@@ -162,6 +168,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                         )}
                     </div>
                 ) : null}
+                
                 {sortedConversation.map((item, index) => (
                     <div key={index} className="mb-10">
                         <p className="Prompt__Bubble Bubble mb-2 mr-10" style={{ opacity: "1", transform: "none" }}>Prompt: {item.prompt}</p>
@@ -179,6 +186,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                         </div>
                     </div>
                 ))}
+                {isLoading ? <p>Loading..</p> : null}
             </div>
 
         </main>
