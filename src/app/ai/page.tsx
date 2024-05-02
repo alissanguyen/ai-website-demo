@@ -3,7 +3,7 @@
 
 import { CompleteConverse, Model } from '@/types';
 import * as React from 'react';
-import { getConversationFromLocalStorage, sortConversationByTimestamp } from '../utils';
+import { getConversationFromLocalStorage, sanitizeInput, sortConversationByTimestamp } from '../utils';
 import SelectMenu from '@/components/SelectMenu/SelectMenu';
 import { models } from '../constants';
 
@@ -75,12 +75,15 @@ const AiPage: React.FC<Props> = ({ }) => {
              * }
              */
 
+            // Validate and sanitize the prompt
+            const sanitizedPrompt = sanitizeInput(prompt);
+
             fetch('https://cloudflare-ai-demo.im-tamnguyen.workers.dev', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
                 },
-                body: JSON.stringify({ prompt: formData.get('prompt'), model: model.id }),
+                body: JSON.stringify({ prompt: sanitizedPrompt, model: model.id }),
             })
                 .then((res) => {
                     if (model.id === models[0].id || model.id === models[1].id) {
@@ -145,7 +148,9 @@ const AiPage: React.FC<Props> = ({ }) => {
                 />
                 {/* We are not using the image classifier model */}
                 {model.id !== models[4].id ? (
-                    <input name="prompt" placeholder='enter prompt' className="custom-border" />
+                    <input name="prompt" placeholder='enter prompt' className="custom-border" required
+                        pattern=".+"
+                        title="Please enter a prompt" />
                 ) : (
                     // We are using the image classifier model, so we add an input form for user to submit an image
                     <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -168,7 +173,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                         )}
                     </div>
                 ) : null}
-                
+
                 {sortedConversation.map((item, index) => (
                     <div key={index} className="mb-10">
                         <p className="Prompt__Bubble Bubble mb-2 mr-10" style={{ opacity: "1", transform: "none" }}>Prompt: {item.prompt}</p>
