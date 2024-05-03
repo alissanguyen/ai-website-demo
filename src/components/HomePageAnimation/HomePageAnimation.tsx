@@ -7,14 +7,18 @@ interface Props {
 }
 
 const HomePageAnimation: React.FC<Props> = ({ }) => {
-    const [screenWidth, setScreenWidth] = React.useState(window.innerWidth);
+    const [screenWidth, setScreenWidth] = React.useState(
+        typeof window !== 'undefined' ? window.innerWidth : 520
+    );
 
     React.useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
         };
 
-        window.addEventListener('resize', handleResize);
+        if (typeof window !== 'undefined') {
+            window.addEventListener('resize', handleResize);
+        }
 
         let select = (s: string) => document.querySelector(s),
             toArray = (s: string) => gsap.utils.toArray(s),
@@ -94,11 +98,13 @@ const HomePageAnimation: React.FC<Props> = ({ }) => {
         });
 
         return () => {
-            window.removeEventListener('resize', handleResize);
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('resize', handleResize);
+            }
         };
     }, []);
-    const ellipseSize = screenWidth <= 520 ? 400 : 160;
-    
+    const ellipseSize = screenWidth >= 520 ? 120 : 400;
+
 
     return (
         <svg id="mainSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" className="HomePageAnimation">
