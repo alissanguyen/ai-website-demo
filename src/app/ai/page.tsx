@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { CompleteConverse, Model } from '@/types';
+import { CompleteConverse, Model } from '@/types/types';
 import * as React from 'react';
-import { getConversationFromLocalStorage, sanitizeInput, sortConversationByTimestamp } from '../utils';
+import { getConversationFromLocalStorage, sanitizeInput, sortConversationByTimestamp } from '../../utils/utils';
 import SelectMenu from '@/components/SelectMenu/SelectMenu';
 import { models } from '../constants';
 
@@ -158,7 +158,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                     <input type="file" accept="image/*" onChange={handleImageChange} />
 
                 )}
-                <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1]">Submit</button>
+                <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
             </form>
 
             <div className="response-wrapper pt-12 lg:p-20">
