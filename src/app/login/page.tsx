@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react';
-import { login, signup } from "./action"
+import { login } from "./action"
 import { Spinner } from '@nextui-org/spinner';
 import "./LoginPage.css"
 
@@ -27,7 +27,7 @@ const LoginPage: React.FC<Props> = ({ }) => {
         <div className="w-full text-white p-10">
             <form className="LoginForm" onSubmit={handleLogin}>
                 <h3 className="text-3xl font-medium leading-9 text-center">Login Here</h3>
-                <label htmlFor="username">Username</label>
+                <label htmlFor="email">Email</label>
                 <input
                     type="text"
                     placeholder="Email"
@@ -50,11 +50,12 @@ const LoginPage: React.FC<Props> = ({ }) => {
                     type="submit"
                     disabled={loading}
                 >
-                    {loading ? <Spinner size="sm" /> : 'Log In'}
+                    {loading ? "Logging in.." : 'Log In'}
                 </button>
+                <div className='flex flex-row items-center mt-3 gap-2'>
+                    New here? <a href="/register" className='text-cyan-400 underline'>Register.</a>
+                </div>
             </form>
-            {loading ? <p>Loading..</p> : null}
-
         </div>
     )
 }
