@@ -1,0 +1,21 @@
+@tailwind utilities;
+@tailwind base;
+@tailwind components;
+
+@layer utilities {
+  .AccountForm {
+    @apply min-h-screen font-sans leading-normal overflow-x-hidden lg:overflow-auto text-lg w-full;
+  }
+  .AccountForm__Light {
+    @apply bg-cream text-charcoal;
+  }
+  .AccountForm__Label {
+    @apply block uppercase tracking-wide text-sm font-bold mb-1;
+  }
+  .AccountForm__Input {
+    @apply w-full shadow-inner p-4 border-0 bg-slate-500/30 rounded-md
+  }
+  .AccountForm__Input.Email {
+    @apply opacity-60 brightness-50
+  }
+}
