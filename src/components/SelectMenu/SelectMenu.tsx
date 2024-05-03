@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import "./SelectMenu.css"
-import { Model } from '@/types';
+import { Model } from '@/types/types';
 import { models } from '@/app/constants';
 
 interface SelectMenuProps {
