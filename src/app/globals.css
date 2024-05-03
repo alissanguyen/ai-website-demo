@@ -23,7 +23,6 @@ body {
   .Bubble {
     @apply rounded-xl border-solid box-border p-4 pl-5 md:pl-10 break-words transition-all max-w-[75ch] text-lg;
   }
-
 }
 
 .Prompt__Bubble {
@@ -37,3 +36,18 @@ body {
   background-image: linear-gradient(rgb(55, 53, 67) 10%, rgb(47, 47, 59));
   color: rgb(229, 229, 226);
 }
+
+.Welcome__Text {
+  z-index: 10;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  top: 20%;
+  left: -0.2rem;
+}
+
+.HomePage__LoginButton {
+  transform: translateY(-5rem);
+}
+
