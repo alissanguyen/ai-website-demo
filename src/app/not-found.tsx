@@ -16,7 +16,7 @@ export default function NotFound() {
                 <p>
                     We're fairly sure that page used to be here, but seems to have gone missing. We do apologise on it's behalf.
                 </p>
-                <a href="/" target="_blank" rel="noreferrer noopener" className='ease-in-out duration-300'>Home</a>
+                <a href="/" className='ease-in-out duration-300'>Home</a>
             </div>
         </div>
     )
