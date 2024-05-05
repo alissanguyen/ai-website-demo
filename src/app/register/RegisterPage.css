@@ -12,10 +12,6 @@
   }
 }
 
-.Submit__Button {
-  background-image: linear-gradient(rgb(17, 18, 23) 50%, rgb(13, 13, 11));
-}
-
 .LoginForm {
   background-color: rgba(109, 105, 105, 0.13);
   border: 2px solid rgba(255, 255, 255, 0.1);

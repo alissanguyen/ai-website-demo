@@ -55,3 +55,7 @@ body {
   width: 30px;
   height: 30px;
 }
+
+.Submit__Button {
+  background-image: linear-gradient(rgb(17, 18, 23) 50%, rgb(13, 13, 11));
+}
