@@ -119,7 +119,7 @@ export default function AccountForm({ user }: { user: User | null }) {
               updateProfile({ fullname, username, website, avatar_url: url })
             }}
           />
-          <div className='flex flex-row items-center justify-between'>
+          <div className='flex flex-col mt-5 xs:mt-0 xs:flex-row xs:items-center justify-between'>
             <div className='p-3'>
               <button
                 className="button primary block px-10 py-4 rounded-lg bg-slate-700/40 hover:bg-slate-700 hover:text-yellow-300 border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200"

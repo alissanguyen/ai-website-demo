@@ -13,9 +13,37 @@
     @apply block uppercase tracking-wide text-sm font-bold mb-1;
   }
   .AccountForm__Input {
-    @apply w-full shadow-inner p-4 border-0 bg-slate-500/30 rounded-md
+    @apply w-full shadow-inner p-4 border-0 bg-slate-500/30 rounded-md;
   }
   .AccountForm__Input.Email {
-    @apply opacity-60 brightness-50
+    @apply opacity-60 brightness-50;
   }
+}
+
+.avatar-edit input {
+  display: none;
+}
+
+.avatar-edit label {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border-radius: 100%;
+  background: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.avatar-edit label:hover {
+  background: #f1f1f1;
+  border-color: #d6d6d6;
+}
+
+.avatar-preview {
+  width: 192px;
+  height: 192px;
+  border: 6px solid #f8f8f8;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 }
