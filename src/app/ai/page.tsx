@@ -1,43 +1,81 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-
-import { CompleteConverse, Model } from '@/types/types';
+import { CompleteConverse, Model, UserProfile } from '@/types/types';
 import * as React from 'react';
-import { getConversationFromLocalStorage, sanitizeInput, sortConversationByTimestamp } from '../../utils/utils';
+import { sanitizeInput, sortConversationByTimestamp } from '../../utils/utils';
 import SelectMenu from '@/components/SelectMenu/SelectMenu';
 import { models } from '../constants';
+import { Spinner } from '@chakra-ui/react'
+import useAuth from '@/hooks/useAuth';
+import { supabaseClient } from '@/utils/supabase/client';
 
 interface Props { }
 
 
 
 const AiPage: React.FC<Props> = ({ }) => {
-    const [conversation, setConversation] = React.useState<CompleteConverse[]>(getConversationFromLocalStorage());
-    const [model, setModel] = React.useState<Model>(models[0])
-
+    const userId: string | null = useAuth();
+    const [conversation, setConversation] = React.useState<CompleteConverse[]>([]);
+    const [model, setModel] = React.useState<Model>(models[0]);
     const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
     const [imagePreview, setImagePreview] = React.useState<string | null>(null);
     const [classificationResult, setClassificationResult] = React.useState<string | null>(null);
-
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [userProfile, setUserProfile] = React.useState<UserProfile | null>()
+    const [avatarUrl, setAvatarUrl] = React.useState<string | null>(null)
+
+
+    React.useEffect(() => {
+        const fetchUserProfile = async () => {
+            if (userId) {
+
+                const { data, error } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+
+                if (error) {
+                    console.error('Error fetching user profile:', error);
+                } else {
+                    setUserProfile(data)
+                    setConversation((prevConversation) => [...(data.conversations || []), ...prevConversation]);
+                    // Fetch the avatar URL from Supabase storage
+                    const { data: avatarData, error: avatarError } = await supabaseClient
+                        .storage
+                        .from('avatars')
+                        .download(data.avatar_url);
+
+                    if (avatarError) {
+                        console.error('Error fetching avatar URL:', avatarError);
+                    } else {
+                        // Create a URL for the downloaded avatar image
+                        const avatarUrl = URL.createObjectURL(avatarData);
+                        setAvatarUrl(avatarUrl);
+                    }
+                }
+            }
+        };
+
+        fetchUserProfile();
+
+    }, [userId]);
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+        event.preventDefault();
         setIsLoading(true);
 
         if (model.id === models[4].id && selectedImage) {
             const arrayBuffer = await selectedImage.arrayBuffer();
             const uint8Array = new Uint8Array(arrayBuffer);
 
-            const response = await fetch('http://localhost:8787', {
+            const response = await fetch('https://cloudflare-ai-demo.im-tamnguyen.workers.dev', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ model: 'imageClassification', image: Array.from(uint8Array) }),
-            }).finally(() => {
-                setIsLoading(false);
-            });
+            })
 
             const result = await response.json();
             const classificationResultText = `Classification: ${result[0].label}`;
@@ -63,62 +101,74 @@ const AiPage: React.FC<Props> = ({ }) => {
             setSelectedImage(null);
             setImagePreview(null);
             setClassificationResult(null);
-
+            setIsLoading(false)
 
         } else {
             const formData = new FormData(event.currentTarget)
             const prompt = formData.get('prompt') as string;
-            /**
-             * {
-             *   "prompt": ...,
-             *   "model" : ...
-             * }
-             */
 
             // Validate and sanitize the prompt
             const sanitizedPrompt = sanitizeInput(prompt);
 
-            fetch('https://cloudflare-ai-demo.im-tamnguyen.workers.dev', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify({ prompt: sanitizedPrompt, model: model.id }),
-            })
-                .then((res) => {
-                    if (model.id === models[0].id || model.id === models[1].id) {
-                        // Handle image response
-                        return res.blob();
-                    } else if (model.id === models[2].id || model.id === models[3].id) {
-                        // Handle text response
-                        return res.json();
-                    } else {
-                        throw new Error('Unsupported model');
-                    }
-                })
-                .then((data) => {
-                    if (model.id === models[0].id || model.id === models[1].id) {
-                        // Process image response
-                        const imageUrl = URL.createObjectURL(data);
-                        setConversation((prevConversation) => [
-                            ...prevConversation,
-                            { prompt, response: { type: 'image', content: imageUrl }, timestamp: Date.now() },
-                        ]);
-                    } else if (model.id === models[2].id || model.id === models[3].id) {
-                        // Process text response
-                        setConversation((prevConversation) => [
-                            ...prevConversation,
-                            { prompt, response: { type: 'text', content: data.data.response }, timestamp: Date.now() },
-                        ]);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                }).finally(() => {
-                    setIsLoading(false);
+            try {
+                const response = await fetch('https://cloudflare-ai-demo.im-tamnguyen.workers.dev', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt: sanitizedPrompt, model: model.id }),
                 });
-        }
 
+                const data = await (model.id === models[0].id || model.id === models[1].id
+                    ? response.blob()
+                    : response.json());
+
+                const newConversationEntry: CompleteConverse = model.id === models[0].id || model.id === models[1].id
+                    ? { prompt, response: { type: 'image', content: URL.createObjectURL(data) }, timestamp: Date.now() }
+                    : { prompt, response: { type: 'text', content: data.data.response }, timestamp: Date.now() };
+
+                setConversation((prevConversation) => [...prevConversation, newConversationEntry]);
+
+                // Save the conversation to the user's profile
+                if (userId) {
+                    const { data: profileData, error: profileError } = await supabaseClient
+                        .from('profiles')
+                        .select('conversations')
+                        .eq('id', userId)
+                        .single();
+
+                    if (profileError) {
+                        console.error('Error fetching user profile:', profileError);
+                    } else {
+                        // Handle when profileData.conversations is null, causing 
+                        // the updatedConversations array to include null as the 
+                        // first element. 
+                        /**
+                         * 1. Checks if profileData.conversations exists. 
+                         * 2. If it does, it spreads the existing conversations 
+                         *      and appends the newConversationEntry. 
+                         * 3. If it doesn't exist, it creates a new array with 
+                         *      only the newConversationEntry.
+                         */
+                        const updatedConversations = profileData.conversations
+                            ? [...profileData.conversations, newConversationEntry]
+                            : [newConversationEntry];
+                        const { error: updateError } = await supabaseClient
+                            .from('profiles')
+                            .update({ conversations: updatedConversations })
+                            .eq('id', userId)
+
+                        if (updateError) {
+                            console.error('Error updating conversations:', updateError);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
     }
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,11 +184,6 @@ const AiPage: React.FC<Props> = ({ }) => {
     };
 
     const sortedConversation = sortConversationByTimestamp(conversation);
-
-    // Save the updated conversation state to local storage if available
-    if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.setItem('conversation', JSON.stringify(conversation));
-    }
 
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-10 pt-24 md:p-24 text-white">
@@ -178,7 +223,10 @@ const AiPage: React.FC<Props> = ({ }) => {
 
                 {sortedConversation.map((item, index) => (
                     <div key={index} className="mb-10">
-                        <p className="Prompt__Bubble Bubble mb-2 mr-10" style={{ opacity: "1", transform: "none" }}>Prompt: {item.prompt}</p>
+                        <div className="Prompt__Bubble Bubble mb-2 mr-10 flex flex-row items-center gap-3" style={{ opacity: "1", transform: "none" }}>
+                            {avatarUrl ? (<img src={avatarUrl} alt="avatar" className='w-10 h-10 rounded-full object-cover' />) : <p>Prompt:</p>}
+                            <p>{item.prompt}</p>
+                        </div>
                         <div className="Response__Bubble Bubble">
                             {item.response.type === 'image' ? (
                                 <img src={item.response.content} alt="" className="Image_Element mb-4" />
@@ -193,7 +241,7 @@ const AiPage: React.FC<Props> = ({ }) => {
                         </div>
                     </div>
                 ))}
-                {isLoading ? <p>Loading..</p> : null}
+                {isLoading ? <Spinner /> : null}
             </div>
 
         </main>
