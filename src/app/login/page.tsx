@@ -1,8 +1,7 @@
 'use client'
 
 import * as React from 'react';
-import { login } from "./action"
-import { Spinner } from '@nextui-org/spinner';
+import { login } from "@/utils/supabase/auth"
 import "./LoginPage.css"
 
 interface Props {
