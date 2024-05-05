@@ -42,13 +42,11 @@ export async function signup(data: SignUpFormData) {
 
 export async function checkAuth(): Promise<string | null> {
   const supabase = createClient();
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (session && session.user) {
-    return session.user.id;
+  if (user) {
+      return user.id;
   } else {
-    return null;
+      return null;
   }
 }
