@@ -9,8 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextui-org/react": "^2.3.6",
-    "@nextui-org/spinner": "^2.0.28",
+    "@chakra-ui/react": "^2.8.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.1",
     "dotenv": "^16.4.5",
