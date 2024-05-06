@@ -4,7 +4,7 @@ import { checkAuth } from '@/utils/supabase/auth';
 
 const useAuth = () => {
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +25,12 @@ const useAuth = () => {
         }
       }
     };
-    checkAuthStatus();
+
+    if (pathname !== '/') {
+      checkAuthStatus();
+    } else {
+      setIsLoading(false);
+    }
   }, [router, pathname]);
 
   return { userId, isLoading };
