@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { login } from "@/utils/supabase/auth"
-import "./LoginPage.css"
 
 interface Props {
 
@@ -23,7 +22,7 @@ const LoginPage: React.FC<Props> = ({ }) => {
     };
 
     return (
-        <div className="w-full text-white p-10">
+        <div className="w-full text-white p-10 mt-14">
             <form className="LoginForm" onSubmit={handleLogin}>
                 <h3 className="text-3xl font-medium leading-9 text-center">Login Here</h3>
                 <label htmlFor="email">Email</label>

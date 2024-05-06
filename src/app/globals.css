@@ -23,6 +23,15 @@ body {
   .Bubble {
     @apply rounded-xl border-solid box-border p-4 pl-5 md:pl-10 break-words transition-all max-w-[75ch] text-lg;
   }
+  .Social__LoginButton {
+    @apply rounded-md text-center text-white bg-slate-500/50 px-4 py-2 hover:bg-slate-500;
+  }
+  .LoginForm {
+    @apply max-w-[520px] m-auto outline-none border-none tracking-normal rounded-xl backdrop-blur-md px-9 py-12;
+  }
+  .SignupForm {
+    @apply max-w-[520px] m-auto outline-none border-none tracking-normal rounded-xl backdrop-blur-md ;
+  }
 }
 
 .Prompt__Bubble {
@@ -81,4 +90,33 @@ nav {
 
 .NavBar {
   background-color: rgb(18, 21, 27);
+}
+
+.LoginForm {
+  background-color: rgba(109, 105, 105, 0.13);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+}
+
+.LoginForm > label {
+  display: block;
+  margin-top: 30px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.LoginForm > input {
+  display: block;
+  height: 50px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0 10px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.LoginForm > ::placeholder {
+  color: #e5e5e5;
 }
