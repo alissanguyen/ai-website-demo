@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { checkAuth } from '@/utils/supabase/auth';
 
 const useAuth = () => {
+  const router = useRouter();
+  const pathname = usePathname()
   const [userId, setUserId] = useState<string | null>(null);
-  // isLoading state to indicate if authentication check is in progress
-  // isLoading to true initially and update it to false after authentication check
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -13,9 +13,20 @@ const useAuth = () => {
       const authenticatedUserId = await checkAuth();
       setUserId(authenticatedUserId);
       setIsLoading(false);
+
+      if (!authenticatedUserId) {
+        const currentPath = pathname;
+        if (currentPath !== '/login' && currentPath !== '/register') {
+          router.replace('/login');
+        }
+      } else {
+        if (pathname === '/login' || pathname === '/register') {
+          router.replace('/account');
+        }
+      }
     };
     checkAuthStatus();
-  }, []);
+  }, [router, pathname]);
 
   return { userId, isLoading };
 };
