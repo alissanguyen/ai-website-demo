@@ -16,7 +16,7 @@ const UserContext = createContext<UserContextData>({
 });
 
 const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const userId: string | null = useAuth();
+  const { userId } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
