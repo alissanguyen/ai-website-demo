@@ -1,0 +1,3 @@
+export default function ErrorPage() {
+    return <div className="mt-14 p-10 text-center"><p className="text-white">Sorry, it looks like that email has already been registered.<br></br> Click <a className="text-cyan-300 underline underline-offset-2" href="/">here</a> to go back to home page or <br></br> click <a className="underline underline-offset-2 text-yellow-300" href="/login">here</a> to go back to login page.</p></div>
+}
