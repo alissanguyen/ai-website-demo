@@ -4,12 +4,9 @@ import * as React from 'react';
 import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import useAuth from '@/hooks/useAuth';
-import { UserProfile } from '@/types/types';
-import { supabaseClient } from '@/utils/supabase/client';
 import Logo from "../../assets/logo.png"
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { UserContext } from '@/contexts/UserContext';
 
 
@@ -25,7 +22,7 @@ function classNames(...classes: string[]) {
 
 
 const NavBar: React.FC = () => {
-    const { fullName, avatarUrl } = React.useContext(UserContext);
+    const { userId, fullName, avatarUrl } = React.useContext(UserContext);
 
     const currentRoute = usePathname();
 
@@ -89,7 +86,7 @@ const NavBar: React.FC = () => {
                                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                                     {/* Profile dropdown */}
-                                    <Menu as="div" className="relative ml-3">
+                                    {userId ? (<Menu as="div" className="relative ml-3">
                                         <div className='flex flex-rows items-center gap-3'>
                                             <p className='hidden sm:flex text-white'>{fullName}</p>
                                             <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -111,37 +108,37 @@ const NavBar: React.FC = () => {
                                             leaveFrom="transform opacity-100 scale-100"
                                             leaveTo="transform opacity-0 scale-95"
                                         >
-                                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-black py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-black py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-center">
                                                 <Menu.Item>
                                                     {({ active }) => (
                                                         <a
                                                             href="/account"
                                                             className={classNames(
                                                                 active ? 'bg-gray-100' : '',
-                                                                'block px-4 py-2 text-sm text-white/90'
+                                                                'block px-4 py-2 text-sm text-white/90 hover:bg-gray-800'
                                                             )}
                                                         >
                                                             Your Profile
                                                         </a>
                                                     )}
                                                 </Menu.Item>
-
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <a
-                                                            href="/auth/signout"
-                                                            className={classNames(
+                                                <form
+                                                    action="/auth/signout"
+                                                    method='post'
+                                                >
+                                                    <Menu.Item>
+                                                        {({ active }) => (
+                                                            <button className={classNames(
                                                                 active ? 'bg-gray-100' : '',
-                                                                'block px-4 py-2 text-sm text-cyan-400'
-                                                            )}
-                                                        >
-                                                            Sign out
-                                                        </a>
-                                                    )}
-                                                </Menu.Item>
+                                                                'block px-4 py-2 text-sm text-cyan-400 w-full hover:bg-gray-800'
+                                                            )}>Sign out</button>
+                                                        )}
+                                                    </Menu.Item>
+                                                </form>
                                             </Menu.Items>
                                         </Transition>
-                                    </Menu>
+                                    </Menu>) : null}
+
                                 </div>
                             </div>
                         </div>
