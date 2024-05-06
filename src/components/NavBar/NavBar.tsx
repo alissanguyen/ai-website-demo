@@ -10,6 +10,7 @@ import { supabaseClient } from '@/utils/supabase/client';
 import Logo from "../../assets/logo.png"
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
+import { UserContext } from '@/contexts/UserContext';
 
 
 const navigation = [
@@ -24,46 +25,9 @@ function classNames(...classes: string[]) {
 
 
 const NavBar: React.FC = () => {
-    const userId: string | null = useAuth();
-    const [userProfile, setUserProfile] = React.useState<UserProfile | null>()
-    const [avatarUrl, setAvatarUrl] = React.useState<string | null>(null)
-    const router = useRouter();
+    const { fullName, avatarUrl } = React.useContext(UserContext);
+
     const currentRoute = usePathname();
-
-    React.useEffect(() => {
-        const fetchUserProfile = async () => {
-            if (userId) {
-
-                const { data, error } = await supabaseClient
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', userId)
-                    .single();
-
-                if (error) {
-                    console.error('Error fetching user profile:', error);
-                } else {
-                    setUserProfile(data)
-                    // Fetch the avatar URL from Supabase storage
-                    const { data: avatarData, error: avatarError } = await supabaseClient
-                        .storage
-                        .from('avatars')
-                        .download(data.avatar_url);
-
-                    if (avatarError) {
-                        console.error('Error fetching avatar URL:', avatarError);
-                    } else {
-                        // Create a URL for the downloaded avatar image
-                        const avatarUrl = URL.createObjectURL(avatarData);
-                        setAvatarUrl(avatarUrl);
-                    }
-                }
-            }
-        };
-
-        fetchUserProfile();
-
-    }, [userId]);
 
     useEffect(() => {
         const setCurrentRoute = () => {
@@ -126,7 +90,8 @@ const NavBar: React.FC = () => {
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
-                                        <div>
+                                        <div className='flex flex-rows items-center gap-3'>
+                                            <p className='hidden sm:flex text-white'>{fullName}</p>
                                             <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                 <span className="absolute -inset-1.5" />
                                                 <span className="sr-only">Open user menu</span>
