@@ -44,7 +44,6 @@
   left: 0;
   top: 0;
   right: 0;
-  /* transform: translateY(-10.3rem); */
   transform: translateY(var(--t));
   transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
@@ -126,41 +125,21 @@
   opacity: 0;
   pointer-events: none;
 }
+
 .select-menu:not(.open) li {
   opacity: 0;
   pointer-events: none;
 }
+
 .select-menu:not(.open) li.selected {
   opacity: 1;
   pointer-events: none;
 }
 
-.select-menu.open.tilt-up {
-  animation: tilt-up 0.4s linear forwards;
+.select-menu.open > ul {
+  transform: translateY(calc(var(--t) - 20%));
 }
 
-.select-menu.open.tilt-up .button em:before {
+.select-menu.open .button em:before {
   --o: 1;
-}
-
-.select-menu.open.tilt-down {
-  animation: tilt-down 0.4s linear forwards;
-}
-
-.select-menu.open.tilt-down .button em:after {
-  --o: 1;
-}
-
-@keyframes tilt-up {
-  40%,
-  60% {
-    transform: perspective(500px) rotateX(8deg);
-  }
-}
-
-@keyframes tilt-down {
-  40%,
-  60% {
-    transform: perspective(500px) rotateX(-8deg);
-  }
 }
