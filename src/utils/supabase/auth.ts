@@ -33,11 +33,15 @@ export async function signup(data: SignUpFormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    redirect("/error");
+    if (error.message === "Email rate limit exceeded") {
+      redirect("/error/emailLimit");
+    } else {
+      redirect("/error");
+    }
   }
-
   revalidatePath("/", "layout");
   redirect("/account");
+
 }
 
 export async function checkAuth(): Promise<string | null> {
