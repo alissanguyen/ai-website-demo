@@ -181,7 +181,7 @@ const AiForm: React.FC<Props> = ({ user }) => {
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-16 text-white">
             <div className='w-full fixed bg-slate-600/80'>
-                <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 w-full md:max-w-[75%] mx-auto p-10">
+                <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 w-full md:max-w-[75%] lg:max-w-[40%] mx-auto p-10">
                     <SelectMenu
                         models={models}
                         selectedModel={model}
@@ -201,7 +201,7 @@ const AiForm: React.FC<Props> = ({ user }) => {
                 </form>
             </div>
 
-            <div ref={conversationContainerRef} className="response-wrapper pt-12 w-full md:max-w-[75%]">
+            <div ref={conversationContainerRef} className="response-wrapper pt-12 w-full md:max-w-[75%] lg:max-w-[40%]">
 
                 {model.id === models[4].id ? (
                     // We are using the image classifier model, so we add an input form for user to submit an image

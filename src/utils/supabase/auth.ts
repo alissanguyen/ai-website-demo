@@ -15,7 +15,6 @@ export async function login(data: LoginFormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    console.log(error.message, "IN LOGIN HEHEHEHEHE")
     redirect("/error");
   }
 
@@ -34,7 +33,6 @@ export async function signup(data: SignUpFormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    console.log(error)
 
     if (error.message === "Email rate limit exceeded") {
       redirect("/error/emailLimit");
