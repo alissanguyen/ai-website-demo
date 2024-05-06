@@ -79,7 +79,7 @@ export default function AccountForm({ user }: { user: User | null }) {
   }
 
   return (
-    <div className="AccountForm form-widget text-white max-w-screen-lg m-auto">
+    <div className="AccountForm form-widget text-white max-w-screen-lg m-auto mt-14">
       <main className='flex-1 md:p-0 lg:pt-8 lg:px-8 md:ml-24 flex flex-col'>
         <section className='p-10 shadow-black shadow-sm bg-slate-900/20'>
 

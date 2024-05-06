@@ -48,14 +48,37 @@ body {
 }
 
 .HomePage__LoginButton {
-  transform: translateY(-5rem);
+  transform: translateY(-8rem);
+}
+
+.HomePage__WelcomeMessage {
+  transform: translateY(-8rem);
+}
+
+@media only screen and (max-width: 500px) {
+  .HomePage__LoginButton {
+    transform: translateY(-7rem);
+  }
+  
+  .HomePage__WelcomeMessage {
+    transform: translateY(-7rem);
+  }
 }
 
 .chakra-spinner {
   width: 30px;
   height: 30px;
+  color: aquamarine;
 }
 
 .Submit__Button {
   background-image: linear-gradient(rgb(17, 18, 23) 50%, rgb(13, 13, 11));
+}
+
+nav {
+  width: -webkit-fill-available;
+}
+
+.NavBar {
+  background-color: rgb(18, 21, 27);
 }
