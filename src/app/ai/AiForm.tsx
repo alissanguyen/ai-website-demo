@@ -24,6 +24,8 @@ const AiForm: React.FC<Props> = ({ user }) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [userProfile, setUserProfile] = React.useState<UserProfile | null>();
 
+    const conversationContainerRef = React.useRef<HTMLDivElement>(null);
+
     React.useEffect(() => {
         const fetchUserProfile = async () => {
             if (userId) {
@@ -169,30 +171,37 @@ const AiForm: React.FC<Props> = ({ user }) => {
         }
     };
 
+    React.useEffect(() => {
+        // Scroll to the bottom of the conversation container when the conversation updates
+        conversationContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, [conversation]);
+
     const sortedConversation = sortConversationByTimestamp(conversation);
 
     return (
-        <main className="flex min-h-[10rem] flex-col items-center justify-between p-10 pt-24 md:p-24 text-white">
-            <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 w-full md:max-w-[50%]">
-                <SelectMenu
-                    models={models}
-                    selectedModel={model}
-                    onModelChange={(selectedModel) => setModel(selectedModel)}
-                />
-                {/* We are not using the image classifier model */}
-                {model.id !== models[4].id ? (
-                    <input name="prompt" placeholder='enter prompt' className="custom-border" required
-                        pattern=".+"
-                        title="Please enter a prompt" />
-                ) : (
-                    // We are using the image classifier model, so we add an input form for user to submit an image
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
+        <main className="flex min-h-[10rem] flex-col items-center justify-between p-16 text-white">
+            <div className='w-full fixed bg-slate-600/80'>
+                <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 w-full md:max-w-[75%] mx-auto p-10">
+                    <SelectMenu
+                        models={models}
+                        selectedModel={model}
+                        onModelChange={(selectedModel) => setModel(selectedModel)}
+                    />
+                    {/* We are not using the image classifier model */}
+                    {model.id !== models[4].id ? (
+                        <input name="prompt" placeholder='enter prompt' className="custom-border" required
+                            pattern=".+"
+                            title="Please enter a prompt" />
+                    ) : (
+                        // We are using the image classifier model, so we add an input form for user to submit an image
+                        <input type="file" accept="image/*" onChange={handleImageChange} />
 
-                )}
-                <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
-            </form>
+                    )}
+                    <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
+                </form>
+            </div>
 
-            <div className="response-wrapper pt-12 lg:p-20">
+            <div ref={conversationContainerRef} className="response-wrapper pt-12 w-full md:max-w-[75%]">
 
                 {model.id === models[4].id ? (
                     // We are using the image classifier model, so we add an input form for user to submit an image
