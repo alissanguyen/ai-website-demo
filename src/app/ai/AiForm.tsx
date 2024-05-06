@@ -157,6 +157,7 @@ const AiForm: React.FC<Props> = ({ user }) => {
                 setIsLoading(false);
             }
         }
+
     }
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,39 +173,21 @@ const AiForm: React.FC<Props> = ({ user }) => {
     };
 
     React.useEffect(() => {
-        // Scroll to the bottom of the conversation container when the conversation updates
-        conversationContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, [conversation]);
+        // Scroll to the bottom of the page when the conversation updates
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
+      }, [conversation]);
 
     const sortedConversation = sortConversationByTimestamp(conversation);
 
     return (
-        <main className="flex min-h-[10rem] flex-col items-center justify-between p-16 text-white">
-            <div className='w-full fixed bg-slate-600/80 bottom-0'>
-                <form method="POST" onSubmit={onSubmit} className="flex flex-col sm:flex-row sm:items-center gap-2 w-full md:max-w-[75%] lg:max-w-[40%] m-auto p-10">
-                    <SelectMenu
-                        models={models}
-                        selectedModel={model}
-                        onModelChange={(selectedModel) => setModel(selectedModel)}
-                    />
-                    <div className='flex flex-row gap-2 pr-10 w-full'>
-                        {/* We are not using the image classifier model */}
-                        {model.id !== models[4].id ? (
-                            <input name="prompt" placeholder='Ask a question..' className="custom-border-2 px-3 sm:px-5 py-2 flex-grow" required
-                                pattern=".+"
-                                title="Please enter a prompt" />
-                        ) : (
-                            // We are using the image classifier model, so we add an input form for user to submit an image
-                            <input type="file" accept="image/*" onChange={handleImageChange} />
-
-                        )}
-                        <button type="submit" className="Submit__Button px-4 sm:px-5 py-2 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-            <div ref={conversationContainerRef} className="response-wrapper pt-12 w-full md:max-w-[75%] lg:max-w-[40%]">
-
+        <main className="flex flex-col items-center justify-between text-white min-h-screen gap-2">
+            {conversation.length > 0 && (
+                <div className="fixed top-[4rem] left-0 right-0 h-[30%] bg-gradient-to-b from-gray-900/70 to-transparent pointer-events-none"></div>
+            )}
+            <div ref={conversationContainerRef} className="Responses__Wrapper flex flex-col gap-5 pt-20 px-10 w-full md:max-w-[75%] lg:max-w-[40%] -z-10 flex-grow overflow-auto relative pb-[180px]">
                 {model.id === models[4].id ? (
                     // We are using the image classifier model, so we add an input form for user to submit an image
                     <div>
@@ -220,7 +203,7 @@ const AiForm: React.FC<Props> = ({ user }) => {
 
                 {sortedConversation.map((item, index) => (
                     <div key={index} className="mb-10">
-                        <div className="Prompt__Bubble Bubble mb-2 mr-10 flex flex-row items-center gap-3" style={{ opacity: "1", transform: "none" }}>
+                        <div className="Prompt__Bubble Bubble mb-2 flex flex-row items-center gap-3" style={{ opacity: "1", transform: "none" }}>
                             {avatarUrl ? (<img src={avatarUrl} alt="avatar" className='w-10 h-10 rounded-full object-cover' />) : <p>Prompt:</p>}
                             <p>{item.prompt}</p>
                         </div>
@@ -241,6 +224,28 @@ const AiForm: React.FC<Props> = ({ user }) => {
                 {isLoading ? <Spinner /> : null}
             </div>
 
+            <div className='PromptForm w-full fixed bottom-0'>
+                <form method="POST" onSubmit={onSubmit} className="flex flex-col sm:flex-row sm:items-center gap-2 w-full md:max-w-[75%] lg:max-w-[40%] m-auto p-10">
+                    <SelectMenu
+                        models={models}
+                        selectedModel={model}
+                        onModelChange={(selectedModel) => setModel(selectedModel)}
+                    />
+                    <div className='flex flex-row gap-2 w-full'>
+                        {/* We are not using the image classifier model */}
+                        {model.id !== models[4].id ? (
+                            <input name="prompt" placeholder='Ask a question..' className="custom-border-2 px-3 sm:px-5 py-2 flex-grow" required
+                                pattern=".+"
+                                title="Please enter a prompt" />
+                        ) : (
+                            // We are using the image classifier model, so we add an input form for user to submit an image
+                            <input type="file" accept="image/*" onChange={handleImageChange} />
+
+                        )}
+                        <button type="submit" className="Submit__Button px-4 sm:px-5 py-2 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
+                    </div>
+                </form>
+            </div>
         </main>
     )
 }
