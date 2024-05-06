@@ -17,8 +17,7 @@ interface Props {
 }
 
 const AiForm: React.FC<Props> = ({ user }) => {
-    const { userId, isLoading: authLoading } = useAuth();
-    const { avatarUrl } = React.useContext(UserContext)
+    const { avatarUrl, userId } = React.useContext(UserContext)
     const [conversation, setConversation] = React.useState<CompleteConverse[]>([]);
     const [model, setModel] = React.useState<Model>(models[0]);
     const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
@@ -26,12 +25,6 @@ const AiForm: React.FC<Props> = ({ user }) => {
     const [classificationResult, setClassificationResult] = React.useState<string | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [userProfile, setUserProfile] = React.useState<UserProfile | null>();
-
-    React.useEffect(() => {
-        if (!user && !authLoading) {
-            redirect('/login');
-        }
-    }, [user, authLoading]);
 
     React.useEffect(() => {
         const fetchUserProfile = async () => {
