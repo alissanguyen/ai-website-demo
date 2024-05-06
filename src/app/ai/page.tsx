@@ -8,13 +8,14 @@ import { models } from '../../constants';
 import { Spinner } from '@chakra-ui/react'
 import useAuth from '@/hooks/useAuth';
 import { supabaseClient } from '@/utils/supabase/client';
+import { UserContext } from '@/contexts/UserContext';
 
 interface Props { }
 
 
 
 const AiPage: React.FC<Props> = ({ }) => {
-    const userId: string | null = useAuth();
+    const { avatarUrl, userId } = React.useContext(UserContext)
     const [conversation, setConversation] = React.useState<CompleteConverse[]>([]);
     const [model, setModel] = React.useState<Model>(models[0]);
     const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
@@ -22,7 +23,6 @@ const AiPage: React.FC<Props> = ({ }) => {
     const [classificationResult, setClassificationResult] = React.useState<string | null>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [userProfile, setUserProfile] = React.useState<UserProfile | null>()
-    const [avatarUrl, setAvatarUrl] = React.useState<string | null>(null)
 
 
     React.useEffect(() => {
@@ -40,19 +40,6 @@ const AiPage: React.FC<Props> = ({ }) => {
                 } else {
                     setUserProfile(data)
                     setConversation((prevConversation) => [...(data.conversations || []), ...prevConversation]);
-                    // Fetch the avatar URL from Supabase storage
-                    const { data: avatarData, error: avatarError } = await supabaseClient
-                        .storage
-                        .from('avatars')
-                        .download(data.avatar_url);
-
-                    if (avatarError) {
-                        console.error('Error fetching avatar URL:', avatarError);
-                    } else {
-                        // Create a URL for the downloaded avatar image
-                        const avatarUrl = URL.createObjectURL(avatarData);
-                        setAvatarUrl(avatarUrl);
-                    }
                 }
             }
         };
