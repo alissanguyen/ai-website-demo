@@ -9,8 +9,6 @@ import { Spinner } from '@chakra-ui/react';
 import { supabaseClient } from '@/utils/supabase/client';
 import { UserContext } from '@/contexts/UserContext';
 import { User } from '@supabase/supabase-js';
-import { redirect } from 'next/navigation';
-import useAuth from '@/hooks/useAuth';
 
 interface Props {
     user: User | null;
