@@ -16,7 +16,7 @@ const useAuth = () => {
 
       if (!authenticatedUserId) {
         const currentPath = pathname;
-        if (currentPath !== '/login' && currentPath !== '/register') {
+        if (currentPath !== '/login' && currentPath !== '/register' && !currentPath.includes('/error')) {
           router.replace('/login');
         }
       } else {
@@ -26,7 +26,7 @@ const useAuth = () => {
       }
     };
 
-    if (pathname !== '/') {
+    if (pathname !== '/' && !pathname.includes('/error')) {
       checkAuthStatus();
     } else {
       setIsLoading(false);
