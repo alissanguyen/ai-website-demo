@@ -41,7 +41,7 @@ const NavBar: React.FC = () => {
             <Disclosure as="nav" className="NavBar z-[100] absolute top-0">
                 {({ open }) => (
                     <>
-                        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                        <div className="mx-auto px-2 sm:px-6 lg:px-8">
                             <div className="relative flex h-16 items-center justify-between">
                                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden z-[200] text-blue-700">
                                     {/* Mobile menu button */}
