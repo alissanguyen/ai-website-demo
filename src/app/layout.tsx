@@ -27,10 +27,10 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
       </Head>
       <body className={inter.className}>
-        <Providers>
-          <NavBar />
-          {children}
-        </Providers>
+          <Providers>
+            <NavBar />
+            {children}
+          </Providers>
       </body>
     </html>
   );
