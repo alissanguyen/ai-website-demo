@@ -4,7 +4,7 @@ import { CompleteConverse, Model, UserProfile } from '@/types/types';
 import * as React from 'react';
 import { sanitizeInput, sortConversationByTimestamp } from '../../utils/utils';
 import SelectMenu from '@/components/SelectMenu/SelectMenu';
-import { models } from '../constants';
+import { models } from '../../constants';
 import { Spinner } from '@chakra-ui/react'
 import useAuth from '@/hooks/useAuth';
 import { supabaseClient } from '@/utils/supabase/client';

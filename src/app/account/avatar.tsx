@@ -5,7 +5,6 @@ import { createClient } from '@/utils/supabase/client'
 export default function Avatar({
     uid,
     url,
-    size,
     onUpload,
 }: {
     uid: string | null

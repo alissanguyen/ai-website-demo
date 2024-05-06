@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import Link from 'next/link'
-import "./styles/not-found.css"
+import "../styles/not-found.css"
 
 export default function NotFound() {
     return (
