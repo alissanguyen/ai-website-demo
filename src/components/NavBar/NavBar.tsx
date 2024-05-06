@@ -38,7 +38,7 @@ const NavBar: React.FC = () => {
 
     return (
         <div>
-            <Disclosure as="nav" className="NavBar z-[100] absolute top-0">
+            <Disclosure as="nav" className="NavBar absolute top-0">
                 {({ open }) => (
                     <>
                         <div className="mx-auto px-2 sm:px-6 lg:px-8">

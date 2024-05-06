@@ -16,6 +16,9 @@ body {
   .custom-border {
     @apply border bg-zinc-800/30 p-4 rounded-xl w-auto hover:border-gray-300;
   }
+  .custom-border-2 {
+    @apply border bg-zinc-800/30 rounded-xl border-gray-400 hover:border-gray-300;
+  }
 
   .Image_Element {
     @apply max-w-[80%] mb-4 rounded-xl;

@@ -180,24 +180,26 @@ const AiForm: React.FC<Props> = ({ user }) => {
 
     return (
         <main className="flex min-h-[10rem] flex-col items-center justify-between p-16 text-white">
-            <div className='w-full fixed bg-slate-600/80'>
-                <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-5 w-full md:max-w-[75%] lg:max-w-[40%] mx-auto p-10">
+            <div className='w-full fixed bg-slate-600/80 bottom-0'>
+                <form method="POST" onSubmit={onSubmit} className="flex flex-col sm:flex-row sm:items-center gap-2 w-full md:max-w-[75%] lg:max-w-[40%] m-auto p-10">
                     <SelectMenu
                         models={models}
                         selectedModel={model}
                         onModelChange={(selectedModel) => setModel(selectedModel)}
                     />
-                    {/* We are not using the image classifier model */}
-                    {model.id !== models[4].id ? (
-                        <input name="prompt" placeholder='enter prompt' className="custom-border" required
-                            pattern=".+"
-                            title="Please enter a prompt" />
-                    ) : (
-                        // We are using the image classifier model, so we add an input form for user to submit an image
-                        <input type="file" accept="image/*" onChange={handleImageChange} />
+                    <div className='flex flex-row gap-2 pr-10 w-full'>
+                        {/* We are not using the image classifier model */}
+                        {model.id !== models[4].id ? (
+                            <input name="prompt" placeholder='Ask a question..' className="custom-border-2 px-3 sm:px-5 py-2 flex-grow" required
+                                pattern=".+"
+                                title="Please enter a prompt" />
+                        ) : (
+                            // We are using the image classifier model, so we add an input form for user to submit an image
+                            <input type="file" accept="image/*" onChange={handleImageChange} />
 
-                    )}
-                    <button type="submit" className="Submit__Button p-5 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
+                        )}
+                        <button type="submit" className="Submit__Button px-4 sm:px-5 py-2 rounded-xl border-2 border-yellow-400/[0] hover:border-2 hover:border-yellow-400/[1] ease-in-out duration-200">Submit</button>
+                    </div>
                 </form>
             </div>
 
